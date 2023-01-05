@@ -27,6 +27,7 @@ class PlayMusic {
   private sourceNode: AudioBufferSourceNode | null = null
   private buffer: AudioBuffer | null = null
   private playState = false
+  private firstPlay = true
 
   private _init() {
     if (this.url == '') {
@@ -37,22 +38,35 @@ class PlayMusic {
   }
 
   public start() {
-    console.log('start')
+    console.log(this.audioContext.currentTime)
     if (!this.playState) {
-      if (this.sourceNode) this.sourceNode.start(0)
+      if (this.firstPlay) {
+        this.sourceNode?.start(0)
+        this.firstPlay = false
+        this.playState = true
+        return
+      }
+      this.audioContext.resume().then((res) => {
+        console.log(res)
+      })
+      // this.sourceNode?.start(this.audioContext.currentTime)
       this.playState = true
     }
   }
   public stop() {
     if (this.playState) {
-      if (this.sourceNode) this.sourceNode.stop()
-      this.playState = false
+      // this.sourceNode?.stop()
+      // this._initSourceNode()
+      // this.playState = false
+      this.audioContext.suspend()
     }
   }
+  /**
+   *  摧毁音频
+   *  @tip 当音频被销毁时,音频的所有状态会被重置,需要手动调用 loadMusic 方法
+   */
   public destroy() {
-    if (this.sourceNode) {
-      this.sourceNode.stop()
-    }
+    if (this.sourceNode) this.sourceNode.stop()
     this.sourceNode = null
     this.buffer = null
     this.playState = false
@@ -66,9 +80,9 @@ class PlayMusic {
     }
   }
   private _initSourceNode() {
-    console.log('_initSourceNode')
+    this.sourceNode = null
     const audioContext = this.audioContext
-    audioContext.resume()
+    this.audioContext.resume()
     const _sourceNode = audioContext.createBufferSource()
     _sourceNode.buffer = this.buffer
     _sourceNode.loop = true
