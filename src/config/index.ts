@@ -1,3 +1,4 @@
+import privacy from './privacy'
 const baseURL =
   process.env.NODE_ENV === 'development'
     ? 'http://192.168.31.55:7001'
@@ -17,5 +18,7 @@ const config = {
   userInfoTableName: 'userInfo', // userInfo 在 localStorage、sessionStorage、cookie存储的key的名称
   loginTimeTableName: 'login_time_stamp',
   tokenTimeOutValue: 2 * 3600 * 1000,
+  weChatOpenTest: false, // 是否开启微信测试
+  ...privacy
 }
 export default config
