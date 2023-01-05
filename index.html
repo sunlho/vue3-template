@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link href="/vite.svg" rel="icon" type="image/svg+xml" />
+  <!--游览器禁止缩放-->
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+  <title>
+    <%- title %>
+  </title>
+  <script src="//res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+  <script src="/src/main.ts" type="module"></script>
+</head>
+
+<body>
+  <div id="app"></div>
+</body>
+<script>
+  (function () {
+    document.addEventListener("gesturestart", function (event) {
+      event.preventDefault();
+    });
+    window.openid = "{{ openid }}"; //用户id
+    window.wxappid = "{{ appId }}"; // 必填，公众号的唯一标识
+    window.timestamp = "{{ timestamp }}"; // 必填，生成签名的时间戳
+    window.nonceStr = "{{ nonceStr }}"; // 必填，生成签名的随机串
+    window.signature = "{{ signature }}"; // 必填
+    window.headimgurl = "{{ headimgurl }}"; // 必填
+    wx.config({
+      debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+      appId: window.wxappid, // 必填，公众号的唯一标识
+      timestamp: window.timestamp, // 必填，生成签名的时间戳
+      nonceStr: window.nonceStr, // 必填，生成签名的随机串
+      signature: window.signature, // 必填，签名，见附录1
+      jsApiList: [
+        "checkJsApi",
+        "onMenuShareTimeline",
+        "onMenuShareAppMessage", //分享给朋友
+      ], // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+    });
+    wx.ready(() => {
+      wx.onMenuShareAppMessage({
+        title: '驰骋·光影行',
+        desc: '当皮卡遇上摄影，郑州日产与乐摄宝、曼富图等你一起嗨“皮”!',
+        link: this.link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+        imgUrl: "https://qushen-file.oss-cn-beijing.aliyuncs.com/qushenIndependent/YourProjectName/1321669111241_.pic.jpg",
+        type: "link", // 分享类型,music、video或link，不填默认为link
+        dataUrl: "", // 如果type是music或video，则要提供数据链接，默认为空
+        success: () => { },
+        cancel: () => {
+          // 用户取消分享后执行的回调函数
+        },
+      });
+      wx.onMenuShareTimeline({
+        title: '驰骋·光影行',
+        desc: '当皮卡遇上摄影，郑州日产与乐摄宝、曼富图等你一起嗨“皮”!',
+        link: this.link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+        imgUrl: "https://qushen-file.oss-cn-beijing.aliyuncs.com/qushenIndependent/YourProjectName/1321669111241_.pic.jpg",
+        success: () => { },
+        cancel: () => {
+          // 用户取消分享后执行的回调函数
+        },
+      });
+    });
+  })();
+</script>
+
+</html>
