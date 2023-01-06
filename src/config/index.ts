@@ -1,3 +1,4 @@
+import privacy from './privacy'
 const baseURL =
   process.env.NODE_ENV === 'development'
     ? 'http://192.168.31.55:7001'
@@ -6,7 +7,7 @@ const base = '/'
 
 const config = {
   baseURL: baseURL, // 请求地址
-  title: 'orange', // 网站标题
+  title: 'vue3-h5-template', // 网站标题
   base: base, // 静态基础路径
   contentType: 'application/json', // 请求体内容类型 application/x-www-form-urlencoded | application/json .....
   messageName: 'message', // 相应状态信息的字段名称
@@ -17,5 +18,7 @@ const config = {
   userInfoTableName: 'userInfo', // userInfo 在 localStorage、sessionStorage、cookie存储的key的名称
   loginTimeTableName: 'login_time_stamp',
   tokenTimeOutValue: 2 * 3600 * 1000,
+  weChatOpenTest: true, // 是否开启微信测试
+  ...privacy
 }
 export default config
