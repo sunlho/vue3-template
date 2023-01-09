@@ -1,7 +1,7 @@
 /** **************************************************************************
  * Type definations
  ****************************************************************************/
-type JSApis =
+declare type JSApis =
   | 'onMenuShareTimeline'
   | 'onMenuShareAppMessage'
   | 'onMenuShareQQ'
@@ -168,7 +168,7 @@ interface CheckJsApiOptions extends Callbacks {
   jsApiList: JSApis[]
 }
 
-interface OnMenuShareTimelineOptions extends MenuCallbacks {
+declare interface OnMenuShareTimelineOptions extends MenuCallbacks {
   /**
    * 分享标题
    */
@@ -185,7 +185,8 @@ interface OnMenuShareTimelineOptions extends MenuCallbacks {
   imgUrl?: string
 }
 
-interface OnMenuShareAppMessageOptions extends OnMenuShareTimelineOptions {
+declare interface OnMenuShareAppMessageOptions
+  extends OnMenuShareTimelineOptions {
   /**
    * 分享描述
    */

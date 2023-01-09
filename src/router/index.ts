@@ -30,6 +30,14 @@ const publicRoutes = [
             meta: {
               title: '自动播放音乐'
             }
+          },
+          {
+            path: 'wx',
+            name: 'wx',
+            component: () => import('@/pages/demo/wx/index.vue'),
+            meta: {
+              title: '微信接口'
+            }
           }
         ]
       },
