@@ -3,8 +3,8 @@
 </template>
 
 <script setup lang="ts">
-import WeChatOpenTest from './hook/tools/useWechatOpenTest'
-const wx = new WeChatOpenTest()
+import WxJsApi from './hook/tools/useWxJsApi'
+new WxJsApi()
 </script>
 
 <style scoped></style>

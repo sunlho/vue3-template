@@ -1,8 +1,9 @@
 /**
- * @description 微信测试号
  * @author Caspian Sun
+ * @notice 请确保已安装 vant 4.x 版本
+ * @notice 请确保已安装 jssha 3.x 版本
  */
-import config from '@/config'
+import { WxJsApiConfig } from '@/config'
 import jsSHA1 from 'jssha/dist/sha1'
 import {
   getWeChatAccessToken,
@@ -17,27 +18,73 @@ enum LocalName {
   jsApiTicketName = 'WE_CHAT_JS_API_TICKET',
   jsApiTicketDueName = 'WE_CHAT_JS_API_TICKET_DUE'
 }
+/**
+ * @description 微信JSApi
+ * @example const wxJsApi = new WxJsApi();
+ * @tips 请查看配置文件中的微信公众号配置
+ * @tips 当开启微信JSApi时，请将后端传递的appId, timestamp, nonceStr, signature 挂载到 window 对象上，开启test模式时，无需后端传递
+ *
+ */
+class WxJsApi {
+  private appId: string
+  private timestamp: string
+  private nonceStr: string
+  private signature: string
 
-class WeChatOpenTest {
+  constructor() {
+    this.appId = window.wxAppId
+    this.timestamp = window.wxTimestamp
+    this.nonceStr = window.wxNonceStr
+    this.signature = window.wxSignature
+    if (WxJsApiConfig.enable) {
+      this._isTest()
+    }
+  }
+  private _init() {
+    window.wx.config({
+      debug: WxJsApiConfig.debug,
+      appId: this.appId,
+      timestamp: this.timestamp,
+      nonceStr: this.nonceStr,
+      signature: this.signature,
+      jsApiList: WxJsApiConfig.jsApiList,
+      beta: false
+    })
+    window.wx.ready(() => {
+      window.wx.checkJsApi({
+        jsApiList: WxJsApiConfig.jsApiList
+      })
+      window.wx.onMenuShareAppMessage(WxJsApiConfig.onMenuShareAppMessage)
+      window.wx.onMenuShareTimeline(WxJsApiConfig.onMenuShareTimeline)
+    })
+  }
+  private async _isTest() {
+    if (WxJsApiConfig.test) {
+      const test = new WxJsApiTest()
+      const { testAppId, signature, nonceStr, timestamp } = await test.init()
+      this.appId = testAppId
+      this.timestamp = timestamp
+      this.nonceStr = nonceStr
+      this.signature = signature
+    }
+    this._init()
+  }
+}
+
+class WxJsApiTest {
   constructor() {
     if (
-      !JSON.stringify(config.weChatOpenTest) ||
-      !config.testAppId ||
-      !config.testAppSecret
+      !JSON.stringify(WxJsApiConfig) ||
+      !JSON.stringify(WxJsApiConfig.test) ||
+      !WxJsApiConfig.testAppId ||
+      !WxJsApiConfig.testAppSecret
     ) {
       showFailToast('请正确配置微信测试号相关信息')
       throw new Error('请正确配置微信测试号相关信息')
     }
-    this._init()
   }
-  private _init() {
-    if (config.weChatOpenTest) {
-      this._setWeChatOpenTest()
-    }
-    return
-  }
-  private async _setWeChatOpenTest() {
-    const { testAppId, testAppSecret } = config
+  public async init() {
+    const { testAppId, testAppSecret } = WxJsApiConfig
     const timestamp = Math.round(new Date().getTime() / 1000).toString()
     const nonceStr = 'Wm3WZYTPz0wzccnW'
     const signature = await this._generateJsApiTicket(
@@ -46,17 +93,12 @@ class WeChatOpenTest {
       nonceStr,
       timestamp
     )
-    console.log(testAppId, testAppSecret, nonceStr, timestamp)
-    if (!signature) return
-    window.wx.config({
-      debug: false,
-      appId: testAppId,
-      timestamp: timestamp,
-      nonceStr: nonceStr,
-      signature: signature,
-      jsApiList: ['checkJsApi', 'onMenuShareTimeline', 'onMenuShareAppMessage'],
-      beta: false
-    })
+    return {
+      testAppId,
+      signature,
+      nonceStr,
+      timestamp
+    }
   }
   private async _generateJsApiTicket(
     testAppId: string,
@@ -66,16 +108,12 @@ class WeChatOpenTest {
   ) {
     const url = window.location.href.split('#')[0]
     const accessToken = await this._getAccessToken(testAppId, testAppSecret)
-    if (!accessToken) return
     const jsapi_ticket = await this._getJsApiTicket(accessToken)
-    if (!jsapi_ticket) return
     const shaObj = new jsSHA1('SHA-1', 'TEXT', { encoding: 'UTF8' })
-    console.log(url)
     shaObj.update(
       `jsapi_ticket=${jsapi_ticket}&noncestr=${nonceStr}&timestamp=${timestamp}&url=${url}`
     )
     const sha = shaObj.getHash('HEX')
-    console.log('sha', sha)
     return sha
   }
   private async _getAccessToken(testAppId: string, testAppSecret: string) {
@@ -128,4 +166,4 @@ class WeChatOpenTest {
     return jsApiTicket
   }
 }
-export default WeChatOpenTest
+export default WxJsApi
