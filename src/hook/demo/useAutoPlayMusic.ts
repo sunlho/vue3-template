@@ -12,6 +12,8 @@ const wx = window.wx
  * @param {PlayMusicParams} [options] - 可选的参数。
  * @param {boolean} [options.isAutoPlay] - 默认关闭 是否自动播放。
  * @param {string} [options.url] - 音乐链接。
+ *
+ * @tip 1. 微信浏览器下,需要确保正确配置微信JsApi
  */
 class PlayMusic {
   private isAutoPlay: boolean
@@ -21,6 +23,7 @@ class PlayMusic {
     this.url = url
     this._init()
   }
+
   private audioContext = new (window.AudioContext ||
     window.webkitAudioContext ||
     window.mozAudioContext)()
@@ -37,8 +40,14 @@ class PlayMusic {
     this.loadMusic(this.url)
   }
 
+  public toggle() {
+    if (this.playState) {
+      this.stop()
+    } else {
+      this.start()
+    }
+  }
   public start() {
-    console.log(this.audioContext.currentTime)
     if (!this.playState) {
       if (this.firstPlay) {
         this.sourceNode?.start(0)
@@ -46,18 +55,13 @@ class PlayMusic {
         this.playState = true
         return
       }
-      this.audioContext.resume().then((res) => {
-        console.log(res)
-      })
-      // this.sourceNode?.start(this.audioContext.currentTime)
+      this.audioContext.resume()
       this.playState = true
     }
   }
   public stop() {
     if (this.playState) {
-      // this.sourceNode?.stop()
-      // this._initSourceNode()
-      // this.playState = false
+      this.playState = false
       this.audioContext.suspend()
     }
   }
@@ -67,27 +71,10 @@ class PlayMusic {
    */
   public destroy() {
     if (this.sourceNode) this.sourceNode.stop()
+    this.audioContext.close()
     this.sourceNode = null
     this.buffer = null
     this.playState = false
-  }
-
-  public togglePlayState() {
-    if (this.playState) {
-      this.stop()
-    } else {
-      this.start()
-    }
-  }
-  private _initSourceNode() {
-    this.sourceNode = null
-    const audioContext = this.audioContext
-    this.audioContext.resume()
-    const _sourceNode = audioContext.createBufferSource()
-    _sourceNode.buffer = this.buffer
-    _sourceNode.loop = true
-    _sourceNode.connect(audioContext.destination)
-    this.sourceNode = _sourceNode
   }
   /**
    *  @description 加载音频,当音频存在时,会先销毁音频
@@ -103,17 +90,30 @@ class PlayMusic {
       this.buffer = await this.audioContext.decodeAudioData(arrayBuffer)
       wx.getNetworkType({
         success: (res) => {
-          console.log(res)
           this._initSourceNode()
           if (isAutoPlay) {
+            console.log(res.networkType)
             this.start()
           }
+        },
+        fail: (err) => {
+          console.log(err)
         }
       })
     } catch (error) {
+      console.error(error)
       showFailToast('音频加载失败')
-      throw new Error('音频加载失败')
     }
+  }
+  private _initSourceNode() {
+    this.sourceNode = null
+    const audioContext = this.audioContext
+    this.audioContext.resume()
+    const _sourceNode = audioContext.createBufferSource()
+    _sourceNode.buffer = this.buffer
+    _sourceNode.loop = true
+    _sourceNode.connect(audioContext.destination)
+    this.sourceNode = _sourceNode
   }
 }
 export default PlayMusic
