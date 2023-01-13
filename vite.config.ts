@@ -3,6 +3,7 @@ import vue from '@vitejs/plugin-vue'
 import Components from 'unplugin-vue-components/vite'
 import { VantResolver } from 'unplugin-vue-components/resolvers'
 import { resolve } from 'path'
+import config from './src/config/index'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -12,6 +13,10 @@ export default defineConfig({
       resolvers: [VantResolver()]
     })
   ],
+  build: {
+    outDir: config.outDir,
+    assetsDir: config.outAssetsDir
+  },
   server: {
     host: '0.0.0.0'
   },
