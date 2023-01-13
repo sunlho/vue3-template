@@ -26,3 +26,5 @@ dist-ssr
 # OS generated files
 package-lock.json
 yarn.lock
+
+src/**/privacy.ts
