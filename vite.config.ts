@@ -4,7 +4,7 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 import { resolve } from 'path'
-
+import config from './src/config/index'
 export default defineConfig({
   plugins: [
     vue(),
@@ -23,7 +23,11 @@ export default defineConfig({
   ],
   server: {
     host: '0.0.0.0',
-    base: "./ ",
+    base: config.base,
+  },
+  build: {
+    outDir: config.outDir,
+    assetsDir: config.outAssetsDir,
   },
   resolve: {
     alias: [

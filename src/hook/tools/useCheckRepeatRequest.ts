@@ -2,6 +2,7 @@
  * @author Caspian Sun
  * @notice 使用前请确保已安装 vant 4.x 版本
  */
+import { type } from 'os'
 import { showLoadingToast, showFailToast, closeToast } from 'vant'
 
 /**
@@ -25,7 +26,7 @@ class CheckRepeatRequest {
     isShowLoading = false,
     isAutoComplete = true,
     repeatRequestText = '请勿重复请求'
-  } = {}) {
+  }: CheckRepeatRequestParams = {}) {
     this.isShowLoading = isShowLoading
     this.isAutoComplete = isAutoComplete
     this.repeatRequestText = repeatRequestText
@@ -57,5 +58,10 @@ class CheckRepeatRequest {
     }
     this.awaitState = true
   }
+}
+type CheckRepeatRequestParams = {
+  isShowLoading?: boolean
+  isAutoComplete?: boolean
+  repeatRequestText?: string
 }
 export default CheckRepeatRequest

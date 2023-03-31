@@ -8,6 +8,9 @@ import config from '@/config/index'
 const {
   baseURL,
   requestTimeout,
+  statusName,
+  successCode,
+  messageName
 } = config
 
 class MyAxios {
@@ -36,10 +39,14 @@ service.axios.interceptors.request.use(
 service.axios.interceptors.response.use(
   (response) => {
     const { data, status } = response
-    if (status == 200) {
-      return Promise.resolve(data)
+    let code = data && data[statusName] ? data[statusName] : status
+    if (successCode.includes(code)) code = 200
+    switch (code) {
+      case 200:
+        return Promise.resolve(data)
+      default:
+        return Promise.reject(new Error(data[messageName]))
     }
-    return Promise.reject(new Error(data.message))
   },
   (error) => {
     return Promise.reject(error)
