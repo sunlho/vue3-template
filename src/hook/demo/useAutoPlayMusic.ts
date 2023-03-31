@@ -4,6 +4,11 @@
 import { showFailToast } from 'vant'
 const wx = window.wx
 
+type PlayMusicParams = {
+  isAutoPlay?: boolean
+  url?: string
+}
+
 /**
  * @description 音乐播放工具类
  * @example
@@ -18,7 +23,7 @@ const wx = window.wx
 class PlayMusic {
   private isAutoPlay: boolean
   private url: string
-  constructor({ isAutoPlay = false, url = '' } = {}) {
+  constructor({ isAutoPlay = false, url = '' }: PlayMusicParams = {}) {
     this.isAutoPlay = isAutoPlay
     this.url = url
     this._init()
@@ -116,4 +121,5 @@ class PlayMusic {
     this.sourceNode = _sourceNode
   }
 }
+
 export default PlayMusic

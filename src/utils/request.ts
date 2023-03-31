@@ -1,71 +1,48 @@
 import axios, {
-  AxiosResponse,
   AxiosRequestConfig,
-  AxiosHeaders,
-  AxiosInstance
+  AxiosInstance,
+  AxiosStatic,
 } from 'axios'
-import { useStore } from '@/store'
-import { showFailToast } from 'vant'
-import config from '@/config'
-
-interface IAxiosInstance extends AxiosInstance {
-  request<T = any, D = any>(config: AxiosRequestConfig<D>): Promise<T>
-}
+import config from '@/config/index'
 
 const {
   baseURL,
-  contentType,
-  messageName,
   requestTimeout,
-  statusName,
-  successCode
 } = config
 
-const codeVerificationArray = Array.isArray(successCode)
-  ? [...successCode]
-  : [...[successCode]]
+class MyAxios {
+  readonly axios: AxiosInstance
+  constructor(axios: AxiosStatic, config: AxiosRequestConfig) {
+    this.axios = axios.create(config)
+  }
+  request<T = unknown, R = T, D = unknown>(config: AxiosRequestConfig<D>): Promise<R> {
+    return this.axios.request<T, R, D>(config)
+  }
+}
 
-const service = <IAxiosInstance>axios.create({
+const service = new MyAxios(axios, {
   baseURL: baseURL,
   timeout: requestTimeout
 })
 
-service.interceptors.request.use(
-  (config: AxiosRequestConfig) => {
-    const { user } = useStore()
-    const token = user.token
-    const headers = new AxiosHeaders()
-    headers.set('Content-Type', contentType)
-    // if (token) {
-    //   headers.set('Authorization', token)
-    // }
-    config.headers = headers
+service.axios.interceptors.request.use(
+  (config) => {
     return config
   },
-  (error: any) => {
-    Promise.reject(error)
+  (error) => {
+    return Promise.reject(error)
   }
 )
-
-service.interceptors.response.use(
-  (response: AxiosResponse) => {
-    const { data, status = 0, statusText } = response
-    let code: number = data && data[statusName] ? data[statusName] : status
-    if (codeVerificationArray.indexOf(code) + 1) code = 200
-    switch (code) {
-      case 200:
-        return data
-      case 401:
-        break
+service.axios.interceptors.response.use(
+  (response) => {
+    const { data, status } = response
+    if (status == 200) {
+      return Promise.resolve(data)
     }
-    const errMsg = `${
-      data && data[messageName] ? data[messageName] : statusText
-    }`
-    showFailToast(errMsg)
-    return Promise.reject(response)
+    return Promise.reject(new Error(data.message))
   },
   (error) => {
-    showFailToast(error)
+    return Promise.reject(error)
   }
 )
 
