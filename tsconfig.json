@@ -16,7 +16,7 @@
     "jsx": "preserve",
     "paths": {
       "@/*": ["src/*"],
-      "#/*": ["types/*"]
+      "/#/*": ["types/*"]
     }
   },
   "include": [

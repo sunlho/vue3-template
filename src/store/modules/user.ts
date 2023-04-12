@@ -4,7 +4,7 @@ import md5 from 'md5'
 import config from '@/config/index'
 import { getItem, setItem, clear } from '@/utils/storage'
 import { setLoginTime } from '@/utils/auth'
-import type { LoginData } from '@/api/types/login'
+import type { LoginBody } from '@/api/login'
 import { login } from '@/api/login'
 
 interface UserStoreState {
@@ -21,27 +21,26 @@ export default defineStore('backstageUser', {
     /**
      * 封装登录请求动作
      */
-    login(data: LoginData) {
+    login(data: LoginBody) {
       const { username, password } = data
       // 返回promise对象
-      return new Promise((resolve, reject) => {
-        login({
-          username,
-          password: md5(password)
-        })
-          .then(({ data }) => {
-            // 设置token
-            this.token = data.token
-            setItem(config.tokenTableName, data.token)
-            // 设置登陆时间
-            setLoginTime()
-            resolve(() => {
-              return
-            })
+      return new Promise(async (resolve, reject) => {
+        try {
+          const { data } = await login({
+            username,
+            password: md5(password)
           })
-          .catch((err) => {
-            reject(err)
+          this.token = data.token
+          setItem(config.tokenTableName, data.token)
+          setLoginTime()
+          resolve(() => {
+            return
           })
+        }
+        catch (err) {
+          reject(err)
+        }
+
       })
     }
     // /**
