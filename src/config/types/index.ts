@@ -1,4 +1,3 @@
-import { type } from 'os'
 
 interface WxJsApiConfigType {
   enable: boolean

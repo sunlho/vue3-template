@@ -4,7 +4,7 @@ import App from './App.vue'
 import Router from './router/index'
 import pinia from './store/index'
 
-import './style.scss'
+import './style/index.scss'
 import 'vant/es/toast/style'
 
 const app = createApp(App)

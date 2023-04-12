@@ -1,8 +1,16 @@
 import service from '@/utils/request'
-import type { LoginData } from './types/login'
 
-export function login(data: LoginData) {
-  return service.request({
+export interface LoginBody {
+  username: string
+  password: string
+}
+
+export interface LoginResponse {
+  token: string
+}
+
+export function login(data: LoginBody) {
+  return service.request<BaseResponseData<LoginResponse>>({
     method: 'post',
     url: '/login',
     data

@@ -485,6 +485,12 @@ interface ChooseWXPayOptions extends Callbacks {
  */
 
 declare interface Window {
+  wxOpenId: string
+  wxAppId: string
+  wxTimestamp: string
+  wxNonceStr: string
+  wxSignature: string
+  wxJsApiTicket: string
   wx: {
     config: (options: ConfigOptions) => void
 
