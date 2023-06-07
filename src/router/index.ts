@@ -13,7 +13,7 @@ const publicRoutes = [
       {
         path: 'demo',
         name: 'demo',
-        redirect: '/demo/dog',
+        redirect: '/demo/icon',
         children: [
           {
             path: 'dog',
@@ -37,6 +37,14 @@ const publicRoutes = [
             component: () => import('@/pages/demo/wx/index.vue'),
             meta: {
               title: '微信接口'
+            }
+          },
+          {
+            path: 'icon',
+            name: 'icon',
+            component: () => import('@/pages/demo/icon/index.vue'),
+            meta: {
+              title: '图标'
             }
           }
         ]
