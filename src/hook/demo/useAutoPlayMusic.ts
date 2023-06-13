@@ -23,12 +23,6 @@ type PlayMusicParams = {
 class PlayMusic {
   private isAutoPlay: boolean
   private url: string
-  constructor({ isAutoPlay = false, url = '' }: PlayMusicParams = {}) {
-    this.isAutoPlay = isAutoPlay
-    this.url = url
-    this._init()
-  }
-
   private audioContext = new (window.AudioContext ||
     window.webkitAudioContext ||
     window.mozAudioContext)()
@@ -36,6 +30,12 @@ class PlayMusic {
   private buffer: AudioBuffer | null = null
   private playState = false
   private firstPlay = true
+
+  constructor({ isAutoPlay = false, url = '' }: PlayMusicParams = {}) {
+    this.isAutoPlay = isAutoPlay
+    this.url = url
+    this._init()
+  }
 
   private _init() {
     if (this.url == '') {
@@ -45,13 +45,19 @@ class PlayMusic {
     this.loadMusic(this.url)
   }
 
-  public toggle() {
+  /**
+   * @description 切换音乐播放状态
+   * @returns {boolean} - 返回音乐播放状态
+   */
+  public toggle(): boolean {
     if (this.playState) {
       this.stop()
     } else {
       this.start()
     }
+    return this.playState
   }
+
   public start() {
     if (!this.playState) {
       if (this.firstPlay) {
@@ -64,12 +70,14 @@ class PlayMusic {
       this.playState = true
     }
   }
+
   public stop() {
     if (this.playState) {
       this.playState = false
       this.audioContext.suspend()
     }
   }
+
   /**
    *  摧毁音频
    *  @tip 当音频被销毁时,音频的所有状态会被重置,需要手动调用 loadMusic 方法
@@ -81,6 +89,7 @@ class PlayMusic {
     this.buffer = null
     this.playState = false
   }
+
   /**
    *  @description 加载音频,当音频存在时,会先销毁音频
    *
@@ -110,6 +119,7 @@ class PlayMusic {
       showFailToast('音频加载失败')
     }
   }
+
   private _initSourceNode() {
     this.sourceNode = null
     const audioContext = this.audioContext
