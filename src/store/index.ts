@@ -1,13 +1,4 @@
-// store/index.ts
-import { createPinia } from 'pinia'
-
-import UserStore from './modules/user'
-
-export function useStore() {
-  return {
-    user: UserStore()
-  }
-}
+import { createPinia } from "pinia"
 
 const pinia = createPinia()
 export default pinia

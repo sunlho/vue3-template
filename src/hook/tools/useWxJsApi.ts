@@ -1,6 +1,5 @@
 /**
  * @author Caspian Sun
- * @notice 请确保已安装 vant 4.x 版本
  * @notice 请确保已安装 jssha 3.x 版本
  */
 import { WxJsApiConfig } from '@/config'
@@ -9,7 +8,6 @@ import {
   getWeChatAccessToken,
   getWeChatJsApiTicket
 } from '@/api/weChatOpenTest'
-import { showFailToast } from 'vant'
 import { getItem, setItem, clear } from '@/utils/storage'
 
 enum LocalName {
@@ -79,7 +77,6 @@ class WxJsApiTest {
       !WxJsApiConfig.testAppId ||
       !WxJsApiConfig.testAppSecret
     ) {
-      showFailToast('请正确配置微信测试号相关信息')
       throw new Error('请正确配置微信测试号相关信息')
     }
   }
@@ -135,7 +132,6 @@ class WxJsApiTest {
         setItem(LocalName.accessTokenDueName, dueTime.toString())
         accessToken = access_token
       } else {
-        showFailToast('accessToken获取失败')
         throw new Error('accessToken获取失败')
       }
     }
@@ -158,7 +154,6 @@ class WxJsApiTest {
         setItem(LocalName.jsApiTicketDueName, dueTime.toString())
         jsApiTicket = ticket
       } else {
-        showFailToast('jsApiTicket获取失败')
         throw new Error('jsApiTicket获取失败')
       }
     }

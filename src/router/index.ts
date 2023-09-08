@@ -1,81 +1,62 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
-import type { RouterOptions } from 'vue-router'
-import config from '@/config/index'
-import Layout from '@/layout/index.vue'
+import { createRouter, createWebHashHistory } from "vue-router"
+import type { RouterOptions } from "vue-router"
 
 const publicRoutes = [
   {
-    path: '/',
-    name: 'index',
-    component: Layout,
-    redirect: '/demo',
+    path: "/",
+    redirect: "/prizeDraw",
     children: [
       {
-        path: 'demo',
-        name: 'demo',
-        redirect: '/demo/icon',
-        children: [
-          {
-            path: 'dog',
-            name: 'dog',
-            component: () => import('@/pages/demo/dog/index.vue'),
-            meta: {
-              title: '获得一只狗狗'
-            }
-          },
-          {
-            path: 'music',
-            name: 'music',
-            component: () => import('@/pages/demo/music/index.vue'),
-            meta: {
-              title: '自动播放音乐'
-            }
-          },
-          {
-            path: 'wx',
-            name: 'wx',
-            component: () => import('@/pages/demo/wx/index.vue'),
-            meta: {
-              title: '微信接口'
-            }
-          },
-          {
-            path: 'icon',
-            name: 'icon',
-            component: () => import('@/pages/demo/icon/index.vue'),
-            meta: {
-              title: '图标'
-            }
-          }
-        ]
+        path: "prizeDraw",
+        name: "prizeDraw",
+        component: () => import("@/views/prizeDraw"),
+        meta: {
+          title: "抽奖",
+        },
       },
       {
-        path: 'index',
-        name: 'index',
-        component: () => import('@/pages/index/index.vue'),
+        path: "dog",
+        name: "dog",
+        component: () => import("@/views/dog/index.vue"),
         meta: {
-          title: '首页'
-        }
+          title: "获得一只狗狗",
+        },
       },
       {
-        path: 'login',
-        name: 'login',
-        component: () => import('@/pages/login/index.vue'),
+        path: "music",
+        name: "music",
+        component: () => import("@/views/music/index.vue"),
         meta: {
-          title: '登陆'
-        }
-      }
-    ]
-  }
+          title: "音乐播放",
+        },
+      },
+      {
+        path: "wx",
+        name: "wx",
+        component: () => import("@/views/wx/index.vue"),
+        meta: {
+          title: "微信接口",
+        },
+      },
+      {
+        path: "icon",
+        name: "icon",
+        component: () => import("@/views/icon/index.vue"),
+        meta: {
+          title: "图标",
+        },
+      },
+    ],
+  },
 ]
 
 const router = createRouter(<RouterOptions>{
   history: createWebHashHistory(),
-  routes: [...publicRoutes]
+  routes: [...publicRoutes],
 })
 
 router.beforeEach((to, from, next) => {
-  document.title = <string>to?.meta?.title || config.title
+  document.title = to.meta.title as string
   next()
 })
 

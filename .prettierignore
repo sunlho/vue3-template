@@ -5,6 +5,5 @@
 .output.js
 **/*.svg
 **/*.sh
-# *.d.ts
 /yarn.lock
 /mock/*

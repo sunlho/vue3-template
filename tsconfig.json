@@ -4,7 +4,7 @@
     "experimentalDecorators": true,
     "useDefineForClassFields": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "strict": true,
     "sourceMap": true,
     "skipLibCheck": true,
@@ -12,7 +12,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "esModuleInterop": true,
-    "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
+    "noEmit": true,
+    "lib": ["esnext", "DOM", "DOM.iterable", "scripthost"],
     "jsx": "preserve",
     "paths": {
       "@/*": ["src/*"],
@@ -20,6 +21,7 @@
     }
   },
   "include": [
+    "services/api.d.ts",
     "vite.config.ts",
     "src/**/*.ts",
     "src/**/*.d.ts",

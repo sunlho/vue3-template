@@ -1,7 +1,7 @@
 /**
  * @description 自动播放音乐
  */
-import { showFailToast } from 'vant'
+import { showFailToast } from "vant"
 const wx = window.wx
 
 type PlayMusicParams = {
@@ -28,21 +28,25 @@ class PlayMusic {
     window.mozAudioContext)()
   private sourceNode: AudioBufferSourceNode | null = null
   private buffer: AudioBuffer | null = null
-  private playState = false
+  private playState = ref(false)
   private firstPlay = true
 
-  constructor({ isAutoPlay = false, url = '' }: PlayMusicParams = {}) {
+  constructor({ isAutoPlay = false, url = "" }: PlayMusicParams = {}) {
     this.isAutoPlay = isAutoPlay
     this.url = url
     this._init()
   }
 
   private _init() {
-    if (this.url == '') {
-      showFailToast('音频链接错误')
+    if (this.url == "") {
+      showFailToast("音频链接错误")
       return
     }
     this.loadMusic(this.url)
+  }
+
+  public state(): Ref<boolean> {
+    return this.playState
   }
 
   /**
@@ -50,30 +54,30 @@ class PlayMusic {
    * @returns {boolean} - 返回音乐播放状态
    */
   public toggle(): boolean {
-    if (this.playState) {
+    if (this.playState.value) {
       this.stop()
     } else {
       this.start()
     }
-    return this.playState
+    return this.playState.value
   }
 
   public start() {
-    if (!this.playState) {
+    if (!this.playState.value) {
       if (this.firstPlay) {
         this.sourceNode?.start(0)
         this.firstPlay = false
-        this.playState = true
+        this.playState.value = true
         return
       }
       this.audioContext.resume()
-      this.playState = true
+      this.playState.value = true
     }
   }
 
   public stop() {
-    if (this.playState) {
-      this.playState = false
+    if (this.playState.value) {
+      this.playState.value = false
       this.audioContext.suspend()
     }
   }
@@ -87,7 +91,7 @@ class PlayMusic {
     this.audioContext.close()
     this.sourceNode = null
     this.buffer = null
-    this.playState = false
+    this.playState.value = false
   }
 
   /**
@@ -97,7 +101,7 @@ class PlayMusic {
    *  @param {boolean} isAutoPlay - 是否自动播放
    */
   public async loadMusic(url: string, isAutoPlay: boolean = this.isAutoPlay) {
-    if (this.playState) this.destroy()
+    if (this.playState.value) this.destroy()
     try {
       const response = await fetch(url)
       const arrayBuffer = await response.arrayBuffer()
@@ -112,11 +116,11 @@ class PlayMusic {
         },
         fail: (err) => {
           console.log(err)
-        }
+        },
       })
     } catch (error) {
       console.error(error)
-      showFailToast('音频加载失败')
+      showFailToast("音频加载失败")
     }
   }
 

@@ -1,5 +1,5 @@
 
-interface WxJsApiConfigType {
+declare interface WxJsApiConfigType {
   enable: boolean
   debug: boolean
   test: boolean
@@ -9,5 +9,3 @@ interface WxJsApiConfigType {
   onMenuShareAppMessage: OnMenuShareAppMessageOptions
   onMenuShareTimeline: OnMenuShareTimelineOptions
 }
-
-export type { WxJsApiConfigType }

@@ -1,38 +1,32 @@
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import AutoImport from 'unplugin-auto-import/vite'
-import Components from 'unplugin-vue-components/vite'
-import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
-import { resolve } from 'path'
-import config from './src/config/index'
+import { defineConfig } from "vite"
+import vue from "@vitejs/plugin-vue"
+import vueJsx from "@vitejs/plugin-vue-jsx"
+import UnoCSS from "unocss/vite"
+import AutoImport from "unplugin-auto-import/vite"
+import Components from "unplugin-vue-components/vite"
+import { resolve } from "path"
+
 export default defineConfig({
+  base: "/",
   plugins: [
     vue(),
+    vueJsx(),
+    UnoCSS(),
     AutoImport({
-      imports: [
-        'vue',
-        'vue-router',
-        'pinia'
-      ],
-      dts: 'types/auto-import.d.ts'
+      imports: ["vue", "vue-router", "pinia"],
+      dts: "types/auto-import.d.ts",
     }),
     Components({
-      dts: 'types/components.d.ts',
-      resolvers: [NaiveUiResolver()]
-    })
+      dts: "types/components.d.ts",
+    }),
   ],
   server: {
-    host: '0.0.0.0',
-    base: config.base,
-  },
-  build: {
-    outDir: config.outDir,
-    assetsDir: config.outAssetsDir,
+    host: "0.0.0.0",
   },
   resolve: {
     alias: [
-      { find: '@', replacement: resolve(__dirname, 'src/') },
-      { find: '/#', replacement: resolve(__dirname, 'types/') }
-    ]
-  }
+      { find: "@", replacement: resolve(__dirname, "src/") },
+      { find: "/#", replacement: resolve(__dirname, "types/") },
+    ],
+  },
 })

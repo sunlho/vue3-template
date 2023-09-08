@@ -5,12 +5,13 @@
 </template>
 
 <script lang="ts" setup>
-import { url, handleGetDog, handleComplete } from '@/hook/demo/useGetDog'
+import { url, handleGetDog, handleComplete } from '@/hook/core/useGetDog'
 </script>
 
 <style lang="scss" scoped>
 .image {
   width: 100%;
+
   img {
     width: 100%;
   }
