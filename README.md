@@ -39,3 +39,7 @@
 ├── package.json
 └── vite.config.js
 ```
+
+### 抽奖DEMO GSAP动画
+
+ <img src="./src/views/prizeDraw/demo.gif" width = "200"  alt="图片名称" align=center />
