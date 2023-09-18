@@ -4,8 +4,16 @@ import type { RouterOptions } from "vue-router"
 const publicRoutes = [
   {
     path: "/",
-    redirect: "/prizeDraw",
+    redirect: "/decorators",
     children: [
+      {
+        path: "decorators",
+        name: "decorators",
+        component: () => import("@/views/decorators"),
+        meta: {
+          title: "decorators",
+        },
+      },
       {
         path: "prizeDraw",
         name: "prizeDraw",

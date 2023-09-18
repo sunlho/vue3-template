@@ -10,7 +10,12 @@ export default defineConfig({
   base: "/",
   plugins: [
     vue(),
-    vueJsx(),
+    vueJsx({
+      babelPlugins: [
+        ["@babel/plugin-proposal-decorators", { legacy: true }],
+        ["@babel/plugin-proposal-class-properties"],
+      ],
+    }),
     UnoCSS(),
     AutoImport({
       imports: ["vue", "vue-router", "pinia"],
