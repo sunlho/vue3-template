@@ -7,15 +7,14 @@
 const wxScanQRCode = () => {
   window.wx.scanQRCode({
     needResult: 1,
-    scanType: ['qrCode', 'barCode'],
+    scanType: ["qrCode", "barCode"],
     success: function (res) {
-      console.log(res)
-      const result = res.resultStr // 当needResult 为 1 时，扫码返回的结果
+      const result = res?.resultStr
       console.log(result)
     },
     fail: function (res) {
-      console.log('err', res)
-    }
+      console.log("err", res)
+    },
   })
 }
 </script>

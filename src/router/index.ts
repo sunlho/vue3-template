@@ -23,14 +23,6 @@ const publicRoutes = [
         },
       },
       {
-        path: "dog",
-        name: "dog",
-        component: () => import("@/views/dog/index.vue"),
-        meta: {
-          title: "获得一只狗狗",
-        },
-      },
-      {
         path: "music",
         name: "music",
         component: () => import("@/views/music/index.vue"),

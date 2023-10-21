@@ -27,6 +27,7 @@ dist-ssr
 # OS generated files
 package-lock.json
 yarn.lock
+pnpm-lock.yaml
 
 src/**/privacy.ts
 types/auto-import.d.ts

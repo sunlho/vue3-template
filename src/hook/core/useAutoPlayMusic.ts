@@ -110,7 +110,6 @@ class PlayMusic {
         success: (res) => {
           this._initSourceNode()
           if (isAutoPlay) {
-            console.log(res.networkType)
             this.start()
           }
         },

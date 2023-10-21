@@ -1,31 +1,28 @@
-import axios, {
-  AxiosRequestConfig,
-  AxiosInstance,
-  AxiosStatic,
-} from 'axios'
-import config from '@/config/index'
+import axios, { AxiosRequestConfig, AxiosInstance, AxiosStatic } from "axios"
 
-const {
-  baseURL,
-  requestTimeout,
-  statusName,
-  successCode,
-  messageName
-} = config
+const statusName = "status"
+const messageName = "message"
+const successCode = [200, 0, "200", "0"]
+const contentType = "application/json"
 
 class MyAxios {
   readonly axios: AxiosInstance
   constructor(axios: AxiosStatic, config: AxiosRequestConfig) {
     this.axios = axios.create(config)
   }
-  request<T = unknown, R = T, D = unknown>(config: AxiosRequestConfig<D>): Promise<R> {
+  request<T = unknown, R = T, D = unknown>(
+    config: AxiosRequestConfig<D>,
+  ): Promise<R> {
     return this.axios.request<T, R, D>(config)
   }
 }
 
 const service = new MyAxios(axios, {
-  baseURL: baseURL,
-  timeout: requestTimeout
+  baseURL: import.meta.env.VITE_API_URL,
+  timeout: 300000,
+  headers: {
+    "Content-Type": contentType,
+  },
 })
 
 service.axios.interceptors.request.use(
@@ -34,7 +31,7 @@ service.axios.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error)
-  }
+  },
 )
 service.axios.interceptors.response.use(
   (response) => {
@@ -50,7 +47,7 @@ service.axios.interceptors.response.use(
   },
   (error) => {
     return Promise.reject(error)
-  }
+  },
 )
 
 export default service
