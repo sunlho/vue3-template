@@ -5,47 +5,46 @@ import { showFailToast } from "vant"
 const wx = window.wx
 
 type PlayMusicParams = {
-  isAutoPlay?: boolean
+  loadAutoPlay?: boolean
   url?: string
 }
 
 /**
  * @description 音乐播放工具类
- * @example
- * const playMusic = new PlayMusic();
+ * @example const playMusic = new PlayMusic();
  *
  * @param {PlayMusicParams} [options] - 可选的参数。
- * @param {boolean} [options.isAutoPlay] - 默认关闭 是否自动播放。
+ * @param {boolean} [options.loadAutoPlay] - 默认关闭 微信环境加载是否自动播放。
  * @param {string} [options.url] - 音乐链接。
+ *
+ * @method toggle - 切换音乐播放状态
+ * @method start - 开始播放音乐
+ * @method stop - 暂停播放音乐
+ * @method destroy - 摧毁音频
+ * @method loadMusic - 加载音频
+ *
+ * @property {boolean} state - 音乐播放状态
  *
  * @tip 1. 微信浏览器下,需要确保正确配置微信JsApi
  */
 class PlayMusic {
-  private isAutoPlay: boolean
-  private url: string
-  private audioContext = new (window.AudioContext ||
-    window.webkitAudioContext ||
-    window.mozAudioContext)()
+  private loadAutoPlay: boolean
+  constructor({ loadAutoPlay = false, url = "" }: PlayMusicParams) {
+    this.loadAutoPlay = loadAutoPlay
+    if (this.loadAutoPlay && wx) this.wxAutoPlay(url)
+  }
+
+  private audioContext: AudioContext | null = null
   private sourceNode: AudioBufferSourceNode | null = null
   private buffer: AudioBuffer | null = null
-  private playState = ref(false)
+  private playState = false
   private firstPlay = true
+  private loaded = false
 
-  constructor({ isAutoPlay = false, url = "" }: PlayMusicParams = {}) {
-    this.isAutoPlay = isAutoPlay
-    this.url = url
-    this._init()
+  get loadedState() {
+    return this.loaded
   }
-
-  private _init() {
-    if (this.url == "") {
-      showFailToast("音频链接错误")
-      return
-    }
-    this.loadMusic(this.url)
-  }
-
-  public state(): Ref<boolean> {
+  get state() {
     return this.playState
   }
 
@@ -54,44 +53,69 @@ class PlayMusic {
    * @returns {boolean} - 返回音乐播放状态
    */
   public toggle(): boolean {
-    if (this.playState.value) {
+    if (this.playState) {
       this.stop()
     } else {
       this.start()
     }
-    return this.playState.value
+    return this.playState
   }
 
   public start() {
-    if (!this.playState.value) {
+    if (!this.playState) {
       if (this.firstPlay) {
         this.sourceNode?.start(0)
         this.firstPlay = false
-        this.playState.value = true
+        this.playState = true
         return
       }
-      this.audioContext.resume()
-      this.playState.value = true
+      this.audioContext?.resume()
+      this.playState = true
     }
   }
-
   public stop() {
-    if (this.playState.value) {
-      this.playState.value = false
-      this.audioContext.suspend()
+    if (this.playState) {
+      this.playState = false
+      this.audioContext?.suspend()
     }
   }
-
   /**
    *  摧毁音频
    *  @tip 当音频被销毁时,音频的所有状态会被重置,需要手动调用 loadMusic 方法
    */
   public destroy() {
     if (this.sourceNode) this.sourceNode.stop()
-    this.audioContext.close()
+    this.audioContext?.close()
+    this.audioContext = null
     this.sourceNode = null
     this.buffer = null
-    this.playState.value = false
+    this.playState = false
+    this.loaded = false
+    this.firstPlay = true
+  }
+
+  private wxAutoPlay(url: string) {
+    if (url == "") return showFailToast("音频链接错误")
+    if (this.buffer || this.sourceNode || this.audioContext) this.destroy()
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await fetch(url)
+        const arrayBuffer = await response.arrayBuffer()
+        wx.getNetworkType({
+          success: async (res) => {
+            await this._initSourceNode(arrayBuffer)
+            this.start()
+            this.loaded = true
+            resolve(true)
+          },
+          fail: (err) => {
+            reject(err)
+          },
+        })
+      } catch (error) {
+        reject(error)
+      }
+    })
   }
 
   /**
@@ -100,33 +124,32 @@ class PlayMusic {
    *  @param {string} url - 音频链接
    *  @param {boolean} isAutoPlay - 是否自动播放
    */
-  public async loadMusic(url: string, isAutoPlay: boolean = this.isAutoPlay) {
-    if (this.playState.value) this.destroy()
-    try {
-      const response = await fetch(url)
-      const arrayBuffer = await response.arrayBuffer()
-      this.buffer = await this.audioContext.decodeAudioData(arrayBuffer)
-      wx.getNetworkType({
-        success: (res) => {
-          this._initSourceNode()
-          if (isAutoPlay) {
-            this.start()
-          }
-        },
-        fail: (err) => {
-          console.log(err)
-        },
-      })
-    } catch (error) {
-      console.error(error)
-      showFailToast("音频加载失败")
-    }
+  public async loadMusic(url: string, isAutoPlay: boolean = false) {
+    if (url == "") return showFailToast("音频链接错误")
+    if (this.buffer || this.sourceNode || this.audioContext) this.destroy()
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await fetch(url)
+        const arrayBuffer = await response.arrayBuffer()
+        await this._initSourceNode(arrayBuffer)
+        if (isAutoPlay) this.start()
+        this.loaded = true
+        resolve(true)
+      } catch (error) {
+        reject(error)
+      }
+    })
   }
-
-  private _initSourceNode() {
+  private async _initSourceNode(arrayBuffer: ArrayBuffer) {
+    this.audioContext = new (window.AudioContext ||
+      //@ts-ignore
+      window.webkitAudioContext ||
+      //@ts-ignore
+      window.mozAudioContext)()
+    this.buffer = await this.audioContext.decodeAudioData(arrayBuffer)
     this.sourceNode = null
     const audioContext = this.audioContext
-    this.audioContext.resume()
+    this.audioContext?.resume()
     const _sourceNode = audioContext.createBufferSource()
     _sourceNode.buffer = this.buffer
     _sourceNode.loop = true

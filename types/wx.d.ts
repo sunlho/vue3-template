@@ -1523,13 +1523,9 @@ declare module wx {
   /* --------------------------------- 小程序 End --------------------------------- */
 }
 
-declare module "@wtto00/jweixin-esm" {
-  export default WX
-}
-
 interface Window {
-  wx: typeof WX
-  jWeixin: typeof WX
+  wx: typeof wx
+  jWeixin: typeof wx
   /**
    * 微信环境中才有该字段，外部浏览器无此字段
    */

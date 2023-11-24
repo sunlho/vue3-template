@@ -19,8 +19,6 @@
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-decorators": "^7.23.2",
-    "@babel/plugin-transform-class-properties": "^7.22.5",
     "@types/lodash": "^4.14.200",
     "@types/node": "^20.8.7",
     "@types/nprogress": "^0.2.2",
@@ -31,7 +29,6 @@
     "eslint": "^8.52.0",
     "eslint-plugin-vue": "^9.17.0",
     "gsap": "^3.12.2",
-    "jssha": "^3.3.1",
     "lodash": "^4.17.21",
     "nprogress": "^0.2.0",
     "postcss": "^8.4.31",

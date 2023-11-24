@@ -5,5 +5,4 @@ declare interface Window {
   wxTimestamp: string
   wxNonceStr: string
   wxSignature: string
-  wx: typeof wx
 }

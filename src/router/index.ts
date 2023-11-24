@@ -7,11 +7,11 @@ const publicRoutes = [
     redirect: "/decorators",
     children: [
       {
-        path: "decorators",
-        name: "decorators",
-        component: () => import("@/views/decorators"),
+        path: "music",
+        name: "music",
+        component: () => import("@/views/music/index.vue"),
         meta: {
-          title: "decorators",
+          title: "音乐播放",
         },
       },
       {
@@ -20,14 +20,6 @@ const publicRoutes = [
         component: () => import("@/views/prizeDraw"),
         meta: {
           title: "抽奖",
-        },
-      },
-      {
-        path: "music",
-        name: "music",
-        component: () => import("@/views/music/index.vue"),
-        meta: {
-          title: "音乐播放",
         },
       },
       {
