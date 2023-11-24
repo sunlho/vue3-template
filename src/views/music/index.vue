@@ -12,23 +12,23 @@
 </template>
 
 <script lang="ts" setup>
-import PlayMusic from '@/hook/core/useAutoPlayMusic'
+import PlayMusic from "@/hook/core/useAutoPlayMusic"
 const music = new PlayMusic({
-  url: 'https://qushen-file.oss-cn-beijing.aliyuncs.com/CBC15/5c89d6779fab955439.mp3',
-  isAutoPlay: false
+  url: "https://qushen-file.oss-cn-beijing.aliyuncs.com/CBC15/5c89d6779fab955439.mp3",
+  loadAutoPlay: true,
 })
-const state = music.state()
 const musicIcon = ref<HTMLElement | null>(null)
 
-watch(state, (val) => {
-  if (val) {
-    musicIcon.value?.style.setProperty('animation-play-state', 'running')
-  } else {
-    musicIcon.value?.style.setProperty('animation-play-state', 'paused')
-  }
-})
-
-
+watch(
+  () => music.state,
+  (val) => {
+    if (val) {
+      musicIcon.value?.style.setProperty("animation-play-state", "running")
+    } else {
+      musicIcon.value?.style.setProperty("animation-play-state", "paused")
+    }
+  },
+)
 </script>
 
 <style lang="scss" scoped>

@@ -4,30 +4,22 @@ import type { RouterOptions } from "vue-router"
 const publicRoutes = [
   {
     path: "/",
-    redirect: "/prizeDraw",
+    redirect: "/decorators",
     children: [
-      {
-        path: "prizeDraw",
-        name: "prizeDraw",
-        component: () => import("@/views/prizeDraw"),
-        meta: {
-          title: "抽奖",
-        },
-      },
-      {
-        path: "dog",
-        name: "dog",
-        component: () => import("@/views/dog/index.vue"),
-        meta: {
-          title: "获得一只狗狗",
-        },
-      },
       {
         path: "music",
         name: "music",
         component: () => import("@/views/music/index.vue"),
         meta: {
           title: "音乐播放",
+        },
+      },
+      {
+        path: "prizeDraw",
+        name: "prizeDraw",
+        component: () => import("@/views/prizeDraw"),
+        meta: {
+          title: "抽奖",
         },
       },
       {
