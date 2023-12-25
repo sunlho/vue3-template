@@ -1,5 +1,5 @@
 export const setItem = (key: string, value: string) => {
-  if (typeof value === 'object') {
+  if (typeof value === "object") {
     value = JSON.stringify(value)
   }
   localStorage.setItem(key, value)

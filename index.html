@@ -13,13 +13,4 @@
   <body>
     <div id="app"></div>
   </body>
-  <script>
-    ;(function () {
-      window.wxOpenId = "{{ openid }}" //用户id
-      window.wxAppId = "{{ appId }}" // 必填，公众号的唯一标识
-      window.wxTimestamp = "{{ timestamp }}" // 必填，生成签名的时间戳
-      window.wxNonceStr = "{{ nonceStr }}" // 必填，生成签名的随机串
-      window.wxSignature = "{{ signature }}" // 必填
-    })()
-  </script>
 </html>

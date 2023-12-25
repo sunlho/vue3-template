@@ -1,18 +1,6 @@
-<template>
-  <div class="wrapper">
-    <div class="music" @click="music.toggle()">
-      <img ref="musicIcon" alt="" src="./music.png" />
-    </div>
-    <div><button @click="music.start()">播放</button></div>
-    <br />
-    <div><button @click="music.stop()">停止</button></div>
-    <br />
-    <div><button @click="music.toggle()">切换</button></div>
-  </div>
-</template>
-
 <script lang="ts" setup>
-import PlayMusic from "@/hook/core/useAutoPlayMusic"
+import { ref, watch } from "vue"
+import PlayMusic from "@/hook/tools/useAutoPlayMusic"
 const music = new PlayMusic({
   url: "https://qushen-file.oss-cn-beijing.aliyuncs.com/CBC15/5c89d6779fab955439.mp3",
   loadAutoPlay: true,
@@ -30,6 +18,19 @@ watch(
   },
 )
 </script>
+
+<template>
+  <div class="wrapper">
+    <div class="music" @click="music.toggle()">
+      <img ref="musicIcon" alt="" src="./music.png" />
+    </div>
+    <div><button @click="music.start()">播放</button></div>
+    <br />
+    <div><button @click="music.stop()">停止</button></div>
+    <br />
+    <div><button @click="music.toggle()">切换</button></div>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .wrapper {

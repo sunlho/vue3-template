@@ -1,20 +1,18 @@
-// export * from '../services/baseClass'
-
-declare interface BaseQuery {
+declare interface BaseParams {
   page: number
   limit: number
 }
 
-declare interface BaseResponseArray<T> extends BaseResponseData {
-  data: {
-    count: number
-    rows: T[]
-  }
-}
-declare interface BaseResponseData<T> extends BaseResponse {
-  data: T
-}
-declare type BaseResponse = {
+declare interface BaseResponse {
+  code: number
   message: string
-  status: number
 }
+
+declare interface BaseResponseWithData<T> extends BaseResponse {
+  result: T
+}
+
+declare type BaseResponseWithArray<T> = BaseResponseWithData<{
+  rows: T[]
+  count: number
+}>

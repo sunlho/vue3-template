@@ -30,14 +30,6 @@ const publicRoutes = [
           title: "微信接口",
         },
       },
-      {
-        path: "icon",
-        name: "icon",
-        component: () => import("@/views/icon/index.vue"),
-        meta: {
-          title: "图标",
-        },
-      },
     ],
   },
 ]

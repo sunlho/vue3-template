@@ -94,28 +94,26 @@ class PlayMusic {
     this.firstPlay = true
   }
 
-  private wxAutoPlay(url: string) {
+  private async wxAutoPlay(url: string) {
     if (url == "") return showFailToast("音频链接错误")
     if (this.buffer || this.sourceNode || this.audioContext) this.destroy()
-    return new Promise(async (resolve, reject) => {
-      try {
-        const response = await fetch(url)
-        const arrayBuffer = await response.arrayBuffer()
-        wx.getNetworkType({
-          success: async (res) => {
-            await this._initSourceNode(arrayBuffer)
-            this.start()
-            this.loaded = true
-            resolve(true)
-          },
-          fail: (err) => {
-            reject(err)
-          },
-        })
-      } catch (error) {
-        reject(error)
-      }
-    })
+    try {
+      const response = await fetch(url)
+      const arrayBuffer = await response.arrayBuffer()
+      wx.getNetworkType({
+        success: async (res) => {
+          await this._initSourceNode(arrayBuffer)
+          this.start()
+          this.loaded = true
+          return Promise.resolve(true)
+        },
+        fail: (err) => {
+          return Promise.reject(err)
+        },
+      })
+    } catch (error) {
+      return Promise.reject(error)
+    }
   }
 
   /**
@@ -127,25 +125,19 @@ class PlayMusic {
   public async loadMusic(url: string, isAutoPlay: boolean = false) {
     if (url == "") return showFailToast("音频链接错误")
     if (this.buffer || this.sourceNode || this.audioContext) this.destroy()
-    return new Promise(async (resolve, reject) => {
-      try {
-        const response = await fetch(url)
-        const arrayBuffer = await response.arrayBuffer()
-        await this._initSourceNode(arrayBuffer)
-        if (isAutoPlay) this.start()
-        this.loaded = true
-        resolve(true)
-      } catch (error) {
-        reject(error)
-      }
-    })
+    try {
+      const response = await fetch(url)
+      const arrayBuffer = await response.arrayBuffer()
+      await this._initSourceNode(arrayBuffer)
+      if (isAutoPlay) this.start()
+      this.loaded = true
+      return Promise.resolve(true)
+    } catch (error) {
+      return Promise.reject(error)
+    }
   }
   private async _initSourceNode(arrayBuffer: ArrayBuffer) {
-    this.audioContext = new (window.AudioContext ||
-      //@ts-ignore
-      window.webkitAudioContext ||
-      //@ts-ignore
-      window.mozAudioContext)()
+    this.audioContext = new (window.AudioContext || window.webkitAudioContext || window.mozAudioContext)()
     this.buffer = await this.audioContext.decodeAudioData(arrayBuffer)
     this.sourceNode = null
     const audioContext = this.audioContext

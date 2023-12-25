@@ -5,21 +5,48 @@ const messageName = "message"
 const successCode = [200, 0, "200", "0"]
 const contentType = "application/json"
 
-class MyAxios {
-  readonly axios: AxiosInstance
+interface MAxiosInstance extends AxiosInstance {
+  <T = unknown, R = T extends BaseResponse ? T : BaseResponseWithData<T>, D = any>(config: AxiosRequestConfig<D>): Promise<R>
+  <T = unknown, R = T, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>
+}
+
+class MAxios {
+  readonly axios: MAxiosInstance
   constructor(axios: AxiosStatic, config: AxiosRequestConfig) {
     this.axios = axios.create(config)
   }
-  request<T = unknown, R = T, D = unknown>(
-    config: AxiosRequestConfig<D>,
-  ): Promise<R> {
-    return this.axios.request<T, R, D>(config)
+  get<T = unknown>(config: AxiosRequestConfig) {
+    return this.axios<T>({
+      ...config,
+      method: "GET",
+    })
+  }
+  post<T = unknown>(config: AxiosRequestConfig) {
+    return this.axios<T>({
+      ...config,
+      method: "POST",
+    })
+  }
+  put<T = unknown>(config: AxiosRequestConfig) {
+    return this.axios<T>({
+      ...config,
+      method: "PUT",
+    })
+  }
+  delete<T = unknown>(config: AxiosRequestConfig) {
+    return this.axios<T>({
+      ...config,
+      method: "DELETE",
+    })
+  }
+  request<T = unknown>(config: AxiosRequestConfig) {
+    return this.axios<T>(config)
   }
 }
 
-const service = new MyAxios(axios, {
+const service = new MAxios(axios, {
   baseURL: import.meta.env.VITE_API_URL,
-  timeout: 300000,
+  timeout: 20000,
   headers: {
     "Content-Type": contentType,
   },
@@ -51,3 +78,4 @@ service.axios.interceptors.response.use(
 )
 
 export default service
+export const axiosInstance = service.axios
