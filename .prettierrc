@@ -1,16 +1,7 @@
 {
-  "printWidth": 80,
+  "printWidth": 140,
   "tabWidth": 2,
   "semi": false,
   "singleQuote": false,
-  "jsxSingleQuote": true,
-  "packageManager": "yarn",
-  "overrides": [
-    {
-      "files": "*.vue",
-      "options": {
-        "printWidth": 200
-      }
-    }
-  ]
+  "jsxSingleQuote": true
 }

@@ -1,70 +1,62 @@
-export const WxJsApiConfig: {
-  debug: boolean
-  jsApiList: wx.JsApi[]
-  updateAppMessageShareData?: wx.AppMessageShareData
-  updateTimelineShareData?: wx.TimelineShareData
-} = {
-  debug: false,
-  jsApiList: ["getNetworkType"],
-  updateAppMessageShareData: {
-    title: "分享标题",
-    desc: "分享描述",
-    link: "分享链接",
-    imgUrl: "分享图标",
-    success: function () {
-      // 设置成功
-    },
-  },
-  updateTimelineShareData: {
-    title: "分享标题",
-    link: "分享链接",
-    imgUrl: "分享图标",
-    success: function () {
-      // 设置成功
-    },
-  },
-}
-
 /**
  * @description 微信JSApi
  * @example const wxJsApi = new WxJsApi();
  * @tips 请查看配置文件中的微信公众号配置
- * @tips 当开启微信JSApi时，请将后端传递的appId, timestamp, nonceStr, signature 挂载到 window 对象上，开启test模式时，无需后端传递
+ * @tips 请将后端传递的appId, timestamp, nonceStr, signature 挂载到 window 对象 或者 传递到构造函数中
  */
-class WxJsApi {
+export class WxJsApi {
+  private debug: boolean = false
+  private jsApiList: wx.JsApi[] = []
   private appId: string
   private timestamp: string
   private nonceStr: string
   private signature: string
 
-  constructor() {
-    this.appId = window.wxAppId
-    this.timestamp = window.wxTimestamp
-    this.nonceStr = window.wxNonceStr
-    this.signature = window.wxSignature
-    this._init()
+  constructor(config?: {
+    debug?: boolean
+    jsApiList?: wx.JsApi[]
+    appId?: string
+    timestamp?: string
+    nonceStr?: string
+    signature?: string
+  }) {
+    config?.debug && (this.debug = true)
+    config?.jsApiList && (this.jsApiList = config.jsApiList)
+    this.appId = window.wxAppId || config?.appId || ""
+    this.timestamp = window.wxTimestamp || config?.timestamp || ""
+    this.nonceStr = window.wxNonceStr || config?.nonceStr || ""
+    this.signature = window.wxSignature || config?.signature || ""
   }
-  private _init() {
-    window.wx.config({
-      debug: WxJsApiConfig.debug,
-      appId: this.appId,
-      timestamp: this.timestamp,
-      nonceStr: this.nonceStr,
-      signature: this.signature,
-      jsApiList: WxJsApiConfig.jsApiList,
-    })
-    window.wx.ready(() => {
-      window.wx.checkJsApi({
-        jsApiList: WxJsApiConfig.jsApiList,
-        success: (res: any) => {},
+  public init() {
+    return new Promise((resolve, reject) => {
+      window.wx.config({
+        debug: this.debug,
+        appId: this.appId,
+        timestamp: this.timestamp,
+        nonceStr: this.nonceStr,
+        signature: this.signature,
+        jsApiList: this.jsApiList,
       })
-      WxJsApiConfig.updateAppMessageShareData &&
-        window.wx.updateAppMessageShareData(
-          WxJsApiConfig.updateAppMessageShareData,
-        )
-      WxJsApiConfig.updateTimelineShareData &&
-        window.wx.updateTimelineShareData(WxJsApiConfig.updateTimelineShareData)
+      window.wx.ready(() => {
+        window.wx.checkJsApi({
+          jsApiList: this.jsApiList,
+          success: (res: any) => {
+            resolve(res)
+          },
+          fail: (err: any) => {
+            reject(err)
+          },
+        })
+      })
     })
+  }
+
+  public setWxShareData(data?: {
+    updateAppMessageShareData?: wx.AppMessageShareData
+    updateTimelineShareData?: wx.TimelineShareData
+  }): void {
+    data?.updateAppMessageShareData && window.wx.updateAppMessageShareData(data.updateAppMessageShareData)
+    data?.updateTimelineShareData && window.wx.updateTimelineShareData(data.updateTimelineShareData)
   }
 }
 

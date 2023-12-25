@@ -1,4 +1,4 @@
-import { FunctionalComponent, VNodeRef } from "vue"
+import { FunctionalComponent, VNodeRef, ref, watch, Ref } from "vue"
 import { gsap } from "gsap"
 import { Button } from "vant"
 import { nameList } from "./name"
@@ -38,9 +38,7 @@ const generateList = (index: number, ref: VNodeRef | undefined) => {
               height: `${itemHeight}px`,
             }}
           >
-            <div class={"bg-#ac45ff flex-center full rd-10px"}>
-              {list[index + i]}
-            </div>
+            <div class={"bg-#ac45ff flex-center full rd-10px"}>{list[index + i]}</div>
           </div>
         )
       })}
@@ -178,8 +176,7 @@ const start = () => {
             handleIndex(currentIndex, "current")
           },
           onUpdate: () => {
-            const currentY =
-              currentGsap.value.progress() * (itemTotalHeight + viewHeight)
+            const currentY = currentGsap.value.progress() * (itemTotalHeight + viewHeight)
             if (currentY >= itemTotalHeight && !suffixGsap.value) {
               suffixGsap.value = gsap.to(suffixRef.value, {
                 duration: duration,
@@ -195,8 +192,7 @@ const start = () => {
                   handleIndex(suffixIndex, "suffix")
                 },
                 onUpdate: () => {
-                  const suffixY =
-                    suffixGsap.value.progress() * (itemTotalHeight + viewHeight)
+                  const suffixY = suffixGsap.value.progress() * (itemTotalHeight + viewHeight)
                   if (suffixY >= itemTotalHeight) {
                     preGsap.value.play()
                   }
@@ -236,11 +232,7 @@ export const PrizeDraw: FunctionalComponent = () => {
       <Button type='primary' class={"text-20px absolute top-0"} onClick={stop}>
         stop
       </Button>
-      <Button
-        type='primary'
-        class={"text-20px absolute top-0 right-0"}
-        onClick={start}
-      >
+      <Button type='primary' class={"text-20px absolute top-0 right-0"} onClick={start}>
         start
       </Button>
     </div>
