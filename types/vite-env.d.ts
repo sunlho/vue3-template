@@ -1,5 +1,4 @@
 /// <reference types="vite/client" />
-declare module "md5"
 interface ImportMetaEnv {
   readonly VITE_API_URL: string
   readonly VITE_APP_WS_URL: string

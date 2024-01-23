@@ -6,7 +6,9 @@ const successCode = [200, 0, "200", "0"]
 const contentType = "application/json"
 
 interface MAxiosInstance extends AxiosInstance {
-  <T = unknown, R = T extends BaseResponse ? T : BaseResponseWithData<T>, D = any>(config: AxiosRequestConfig<D>): Promise<R>
+  <T = unknown, R = T extends BaseResponse ? T : T extends unknown ? BaseResponseWithData<any> : BaseResponseWithData<T>, D = any>(
+    config: AxiosRequestConfig<D>,
+  ): Promise<R>
   <T = unknown, R = T, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>
 }
 

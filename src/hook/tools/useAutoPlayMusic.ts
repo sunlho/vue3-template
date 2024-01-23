@@ -4,6 +4,13 @@
 import { showFailToast } from "vant"
 const wx = window.wx
 
+declare global {
+  interface Window {
+    webkitAudioContext: any
+    mozAudioContext: any
+  }
+}
+
 type PlayMusicParams = {
   loadAutoPlay?: boolean
   url?: string
