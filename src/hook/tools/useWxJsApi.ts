@@ -4,6 +4,16 @@
  * @tips 请查看配置文件中的微信公众号配置
  * @tips 请将后端传递的appId, timestamp, nonceStr, signature 挂载到 window 对象 或者 传递到构造函数中
  */
+
+declare global {
+  interface Window {
+    wxAppId?: string
+    wxTimestamp?: string
+    wxNonceStr?: string
+    wxSignature?: string
+  }
+}
+
 export class WxJsApi {
   private debug: boolean = false
   private jsApiList: wx.JsApi[] = []
