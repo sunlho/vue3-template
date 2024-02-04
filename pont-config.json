@@ -1,0 +1,12 @@
+{
+  "origins": [],
+  "templatePath": "./pontTemplate",
+  "fetchMethodPath": "./fetchMethodPath",
+  "outDir": "./services",
+  "originType": "SwaggerV3",
+  "usingMultipleOrigins": true,
+  "mocks": {
+    "enable": false
+  },
+  "templateType": "hooks"
+}
