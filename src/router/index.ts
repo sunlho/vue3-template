@@ -4,17 +4,7 @@ import type { RouterOptions } from "vue-router"
 const publicRoutes = [
   {
     path: "/",
-    redirect: "/decorators",
-    children: [
-      {
-        path: "music",
-        name: "music",
-        component: () => import("@/views/music/index.vue"),
-        meta: {
-          title: "音乐播放",
-        },
-      },
-    ],
+    component: () => import("@/views/index.vue"),
   },
 ]
 
@@ -24,7 +14,7 @@ const router = createRouter(<RouterOptions>{
 })
 
 router.beforeEach((to, from, next) => {
-  document.title = to.meta.title as string
+  document.title = (to.meta.title as string) || ""
   next()
 })
 

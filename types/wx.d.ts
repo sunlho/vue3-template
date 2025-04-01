@@ -1322,9 +1322,7 @@ declare module wx {
    * [官方文档](https://developers.weixin.qq.com/doc/offiaccount/Shake_Nearby/Active_from_Html5/HTML_5_Page_Get_Device_Info.html#%E7%9B%91%E5%90%AC%E5%91%A8%E8%BE%B9ibeacon%E8%AE%BE%E5%A4%87%E6%8E%A5%E5%8F%A3)
    * @param options complete
    */
-  function onSearchBeacons(
-    options: CommonApiOptions<{}, { onSearchBeacons: { beacons: Beacons[] } }>,
-  ): void
+  function onSearchBeacons(options: CommonApiOptions<{}, { onSearchBeacons: { beacons: Beacons[] } }>): void
   /* --------------------------------- 摇一摇周边 End --------------------------------- */
 
   /* --------------------------------- 界面操作 Start --------------------------------- */
@@ -1405,9 +1403,7 @@ declare module wx {
    * ```
    * @param options productId,viewType
    */
-  function openProductSpecificView(
-    options: OpenProductSpecificViewOptions,
-  ): void
+  function openProductSpecificView(options: OpenProductSpecificViewOptions): void
   /* --------------------------------- 微信小店 End --------------------------------- */
 
   /* --------------------------------- 微信卡券 Start --------------------------------- */

@@ -15,6 +15,9 @@ body {
 #app {
   height: 100%;
   overflow: hidden;
+  background: linear-gradient(72deg, #ca9e77, #8699c4);
+  -webkit-background: linear-gradient(72deg, #ca9e77, #8699c4);
+  -moz-background: linear-gradient(72deg, #ca9e77, #8699c4);
 }
 
 ::-webkit-scrollbar {

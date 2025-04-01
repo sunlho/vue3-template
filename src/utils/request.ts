@@ -1,60 +1,32 @@
-import axios, { AxiosRequestConfig, AxiosInstance, AxiosStatic } from "axios"
-
+import axios, { AxiosRequestConfig, AxiosInstance as OriginAxiosInstance } from "axios"
+const baseURL = import.meta.env.VITE_API_URL
+const timeout = 20000
 const statusName = "status"
 const messageName = "message"
 const successCode = [200, 0, "200", "0"]
 const contentType = "application/json"
 
-interface MAxiosInstance extends AxiosInstance {
-  <T = unknown, R = T extends BaseResponse ? T : T extends unknown ? BaseResponseWithData<any> : BaseResponseWithData<T>, D = any>(
-    config: AxiosRequestConfig<D>,
-  ): Promise<R>
-  <T = unknown, R = T, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>
+type ResponseType<T> = T extends BaseResponse ? T : unknown extends T ? BaseResponseWithData<any> : BaseResponseWithData<T>
+
+interface AxiosInstance extends OriginAxiosInstance {
+  <T = unknown, R = ResponseType<T>, D = any>(config: AxiosRequestConfig<D>): Promise<R>
+  <T = unknown, R = ResponseType<T>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>
+  get<T = unknown, R = ResponseType<T>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>
+  delete<T = number, R = ResponseType<T>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R>
+  post<T = unknown, R = ResponseType<T>, D = any>(url: string, data?: any, config?: AxiosRequestConfig<D>): Promise<R>
+  put<T = number[], R = ResponseType<T>, D = any>(url: string, data?: any, config?: AxiosRequestConfig<D>): Promise<R>
 }
 
-class MAxios {
-  readonly axios: MAxiosInstance
-  constructor(axios: AxiosStatic, config: AxiosRequestConfig) {
-    this.axios = axios.create(config)
-  }
-  get<T = unknown>(config: AxiosRequestConfig) {
-    return this.axios<T>({
-      ...config,
-      method: "GET",
-    })
-  }
-  post<T = unknown>(config: AxiosRequestConfig) {
-    return this.axios<T>({
-      ...config,
-      method: "POST",
-    })
-  }
-  put<T = unknown>(config: AxiosRequestConfig) {
-    return this.axios<T>({
-      ...config,
-      method: "PUT",
-    })
-  }
-  delete<T = unknown>(config: AxiosRequestConfig) {
-    return this.axios<T>({
-      ...config,
-      method: "DELETE",
-    })
-  }
-  request<T = unknown>(config: AxiosRequestConfig) {
-    return this.axios<T>(config)
-  }
-}
-
-const service = new MAxios(axios, {
-  baseURL: import.meta.env.VITE_API_URL,
-  timeout: 20000,
+const service = axios.create({
+  baseURL,
+  timeout,
   headers: {
     "Content-Type": contentType,
   },
-})
+  withCredentials: true,
+}) as AxiosInstance
 
-service.axios.interceptors.request.use(
+service.interceptors.request.use(
   (config) => {
     return config
   },
@@ -62,7 +34,7 @@ service.axios.interceptors.request.use(
     return Promise.reject(error)
   },
 )
-service.axios.interceptors.response.use(
+service.interceptors.response.use(
   (response) => {
     const { data, status } = response
     let code = data && data[statusName] ? data[statusName] : status
@@ -80,4 +52,5 @@ service.axios.interceptors.response.use(
 )
 
 export default service
-export const axiosInstance = service.axios
+export const axiosInstance = service
+export const request = service

@@ -30,8 +30,8 @@ export class WxJsApi {
     nonceStr?: string
     signature?: string
   }) {
-    config?.debug && (this.debug = true)
-    config?.jsApiList && (this.jsApiList = config.jsApiList)
+    if (config?.debug) this.debug = true
+    if (config?.jsApiList) this.jsApiList = config.jsApiList
     this.appId = window.wxAppId || config?.appId || ""
     this.timestamp = window.wxTimestamp || config?.timestamp || ""
     this.nonceStr = window.wxNonceStr || config?.nonceStr || ""
@@ -65,8 +65,8 @@ export class WxJsApi {
     updateAppMessageShareData?: wx.AppMessageShareData
     updateTimelineShareData?: wx.TimelineShareData
   }): void {
-    data?.updateAppMessageShareData && window.wx.updateAppMessageShareData(data.updateAppMessageShareData)
-    data?.updateTimelineShareData && window.wx.updateTimelineShareData(data.updateTimelineShareData)
+    if (data?.updateAppMessageShareData) window.wx.updateAppMessageShareData(data.updateAppMessageShareData)
+    if (data?.updateTimelineShareData) window.wx.updateTimelineShareData(data.updateTimelineShareData)
   }
 }
 
