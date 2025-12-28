@@ -1,9 +1,7 @@
-import { defineConfig } from "unocss"
-import { presetWind3 } from "unocss"
-import transformerVariantGroup from "@unocss/transformer-variant-group"
+import { defineConfig, presetMini, transformerVariantGroup } from "unocss"
 
 export default defineConfig({
-  presets: [presetWind3()],
+  presets: [presetMini()],
   rules: [
     [
       /^ma-(.+)-(.+)$/,

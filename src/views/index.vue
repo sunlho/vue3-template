@@ -1,6 +1,4 @@
-<script lang="ts" setup>
-import {} from "vue"
-</script>
+<script lang="ts" setup></script>
 
 <template>
   <div></div>

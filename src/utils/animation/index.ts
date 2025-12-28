@@ -1,53 +1,61 @@
-import anime from "animejs"
+import { animate, createTimeline, AnimationParams, utils } from "animejs"
 import effect from "./effect"
 export { hiddenEffect } from "./effect"
+
 export const handleAnimation = (
-  element: HTMLElement | null,
-  config: (anime.AnimeParams & {
+  element: HTMLElement | Element | null,
+  config: (AnimationParams & {
     value: string
   })[],
 ) => {
-  anime.remove(element)
+  if (!element) return
+  utils.remove(element)
   if (config.length == 1) {
     const item = config[0]
-    const animeParams = effect[item.value as keyof typeof effect]?.(element, item)
-    if (animeParams) anime(animeParams)
+    if (!item.duration) item.duration = 1000
+    const animeParams = effect[item.value as keyof typeof effect]?.(item)
+    if (animeParams) animate(element, animeParams)
   } else {
-    const tl = anime.timeline()
+    const tl = createTimeline()
     for (const item of config) {
-      const animeParams = effect[item.value as keyof typeof effect]?.(element, item)
-      if (animeParams) tl.add(animeParams)
+      if (!item.duration) item.duration = 1000
+      const animeParams = effect[item.value as keyof typeof effect]?.(item)
+      if (animeParams) tl.add(element, animeParams)
     }
   }
 }
-export const handleRemoveAnimation = (element: HTMLElement | null) => {
-  anime.remove(element)
+export const handleRemoveAnimation = (element: HTMLElement | Element | null) => {
+  if (!element) return
+  utils.remove(element)
 }
 
 export function createAndPauseAnimation(
-  element: HTMLElement | null,
-  config: (anime.AnimeParams & {
+  element: HTMLElement | Element | null,
+  config: (AnimationParams & {
     value: string
   })[],
 ) {
-  anime.remove(element)
+  if (!element) return
+  utils.remove(element)
   if (config.length == 1) {
     const item = config[0]
-    const animeParams = effect[item.value as keyof typeof effect]?.(element, item)
+    if (!item.duration) item.duration = 1000
+    const animeParams = effect[item.value as keyof typeof effect]?.(item)
     if (animeParams) {
       animeParams.autoplay = false
-      const animation = anime(animeParams)
+      const animation = animate(element, animeParams)
       return {
         start: () => animation.play(),
       }
     }
   } else {
-    const tl = anime.timeline({
+    const tl = createTimeline({
       autoplay: false,
     })
     for (const item of config) {
-      const animeParams = effect[item.value as keyof typeof effect]?.(element, item)
-      if (animeParams) tl.add(animeParams)
+      if (!item.duration) item.duration = 1000
+      const animeParams = effect[item.value as keyof typeof effect]?.(item)
+      if (animeParams) tl.add(element, animeParams)
     }
     return {
       start: () => tl.play(),

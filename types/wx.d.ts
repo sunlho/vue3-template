@@ -229,13 +229,12 @@ declare module wx {
   /**
    * 参数：拍照或从手机相册中选图接口
    */
-  interface ChooseImageOptions
-    extends CommonApiOptions<{
-      /**
-       * 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
-       */
-      localIds: string[]
-    }> {
+  interface ChooseImageOptions extends CommonApiOptions<{
+    /**
+     * 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+     */
+    localIds: string[]
+  }> {
     /**
      * 默认9
      */
@@ -267,13 +266,12 @@ declare module wx {
   /**
    * 参数：上传资源接口
    */
-  interface UploadOptions
-    extends CommonApiOptions<{
-      /**
-       * 返回资源的服务器端ID
-       */
-      serverId: string
-    }> {
+  interface UploadOptions extends CommonApiOptions<{
+    /**
+     * 返回资源的服务器端ID
+     */
+    serverId: string
+  }> {
     /**
      * 需要上传的资源的本地ID
      * uploadimage: 由chooseImage接口获得
@@ -289,13 +287,12 @@ declare module wx {
   /**
    * 参数：下载资源接口
    */
-  interface DownloadOptions
-    extends CommonApiOptions<{
-      /**
-       * 返回资源下载后的本地ID
-       */
-      localId: string
-    }> {
+  interface DownloadOptions extends CommonApiOptions<{
+    /**
+     * 返回资源下载后的本地ID
+     */
+    localId: string
+  }> {
     /**
      * 需要下载的资源的服务器端ID
      * downloadImage: 由uploadImage接口获得
@@ -311,13 +308,12 @@ declare module wx {
   /**
    * 参数：获取本地图片接口
    */
-  interface GetLocalImgDataOptions
-    extends CommonApiOptions<{
-      /**
-       * localData是图片的base64数据，可以用img标签显示
-       */
-      localData: string
-    }> {
+  interface GetLocalImgDataOptions extends CommonApiOptions<{
+    /**
+     * localData是图片的base64数据，可以用img标签显示
+     */
+    localData: string
+  }> {
     /**
      * 图片的localID
      */
@@ -339,13 +335,12 @@ declare module wx {
   /**
    * 参数：识别音频并返回识别结果接口
    */
-  interface TranslateVoiceOptions
-    extends CommonApiOptions<{
-      /**
-       * 语音识别的结果
-       */
-      translateResult: string
-    }> {
+  interface TranslateVoiceOptions extends CommonApiOptions<{
+    /**
+     * 语音识别的结果
+     */
+    translateResult: string
+  }> {
     /**
      * 需要识别的音频的本地Id，由录音相关接口获得
      */
@@ -399,25 +394,24 @@ declare module wx {
   /**
    * 参数：获取地理位置接口
    */
-  interface GetLocationOptions
-    extends CommonApiOptions<{
-      /**
-       * 纬度，浮点数，范围为90 ~ -90
-       */
-      latitude: number
-      /**
-       * 经度，浮点数，范围为180 ~ -180。
-       */
-      longitude: number
-      /**
-       * 速度，以米/每秒计
-       */
-      speed: number
-      /**
-       * 位置精度
-       */
-      accuracy: number
-    }> {
+  interface GetLocationOptions extends CommonApiOptions<{
+    /**
+     * 纬度，浮点数，范围为90 ~ -90
+     */
+    latitude: number
+    /**
+     * 经度，浮点数，范围为180 ~ -180。
+     */
+    longitude: number
+    /**
+     * 速度，以米/每秒计
+     */
+    speed: number
+    /**
+     * 位置精度
+     */
+    accuracy: number
+  }> {
     /**
      * 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
      */
@@ -492,10 +486,9 @@ declare module wx {
   /**
    * 参数：调起微信扫一扫接口
    */
-  interface ScanQRCodeOptions
-    extends CommonApiOptions<{
-      resultStr?: string
-    }> {
+  interface ScanQRCodeOptions extends CommonApiOptions<{
+    resultStr?: string
+  }> {
     /**
      * 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
      */
@@ -528,13 +521,12 @@ declare module wx {
   /**
    * 参数：拉取适用卡券列表并获取用户选择信息
    */
-  interface ChooseCardOptions
-    extends CommonApiOptions<{
-      /**
-       * 用户选中的卡券列表信息
-       */
-      cardList: Card[]
-    }> {
+  interface ChooseCardOptions extends CommonApiOptions<{
+    /**
+     * 用户选中的卡券列表信息
+     */
+    cardList: Card[]
+  }> {
     /**
      * 门店ID。shopID用于筛选出拉起带有指定location_list(shopID)的卡券列表，非必填。
      */
@@ -568,13 +560,12 @@ declare module wx {
   /**
    * 参数：批量添加卡券接口
    */
-  interface AddCardOptions
-    extends CommonApiOptions<{
-      /**
-       * 添加的卡券列表信息
-       */
-      cardList: Card[]
-    }> {
+  interface AddCardOptions extends CommonApiOptions<{
+    /**
+     * 添加的卡券列表信息
+     */
+    cardList: Card[]
+  }> {
     /**
      * 需要添加的卡券列表
      */
@@ -639,41 +630,40 @@ declare module wx {
   /**
    * 参数：共享收货地址接口
    */
-  interface OpenAddressOptions
-    extends CommonApiOptions<{
-      /**
-       * 收货人姓名
-       */
-      userName: string
-      /**
-       * 邮编
-       */
-      postalCode: string
-      /**
-       * 国标收货地址第一级地址（省）
-       */
-      provinceName: string
-      /**
-       * 国标收货地址第二级地址（市）
-       */
-      cityName: string
-      /**
-       * 国标收货地址第三级地址（区）
-       */
-      countryName: string
-      /**
-       * 详细收货地址信息
-       */
-      detailInfo: string
-      /**
-       * 收货地址国家码
-       */
-      nationalCode: string
-      /**
-       * 收货人手机号码
-       */
-      telNumber: string
-    }> {}
+  interface OpenAddressOptions extends CommonApiOptions<{
+    /**
+     * 收货人姓名
+     */
+    userName: string
+    /**
+     * 邮编
+     */
+    postalCode: string
+    /**
+     * 国标收货地址第一级地址（省）
+     */
+    provinceName: string
+    /**
+     * 国标收货地址第二级地址（市）
+     */
+    cityName: string
+    /**
+     * 国标收货地址第三级地址（区）
+     */
+    countryName: string
+    /**
+     * 详细收货地址信息
+     */
+    detailInfo: string
+    /**
+     * 收货地址国家码
+     */
+    nationalCode: string
+    /**
+     * 收货人手机号码
+     */
+    telNumber: string
+  }> {}
 
   /**
    * 小程序页面间事件通信通道
@@ -1110,8 +1100,7 @@ declare module wx {
    */
   function onVoiceRecordEnd(
     options: CommonApiOptions<
-      {},
-      {
+      Record<string, any> & {
         /**
          * 本地资源ID
          */
@@ -1529,7 +1518,7 @@ interface Window {
     call: () => void
     invoke: (e: any, t: any, n: any) => void
     log: (e: any) => void
-    on: (e: any, t: Function) => void
+    on: (e: any, t: (...args: never) => unknown) => void
   }
   /**
    * 小程序web-view中才有该字段

@@ -6,6 +6,10 @@ const publicRoutes = [
     path: "/",
     component: () => import("@/views/index.vue"),
   },
+  {
+    path: "/animate",
+    component: () => import("@/views/animate/index.vue"),
+  },
 ]
 
 const router = createRouter(<RouterOptions>{
@@ -14,7 +18,6 @@ const router = createRouter(<RouterOptions>{
 })
 
 router.beforeEach((to, from, next) => {
-  document.title = (to.meta.title as string) || ""
   next()
 })
 

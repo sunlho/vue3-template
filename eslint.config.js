@@ -17,20 +17,14 @@ export default tseslint.config({
     "import/resolver": [".ts", ".tsx", ".vue"],
   },
   rules: {
-    "@typescript-eslint/no-unused-vars": "off",
-    "@typescript-eslint/no-explicit-any": "off",
     "no-undef": "off",
-    "prettier/prettier": [
-      "warn",
-      {
-        printWidth: 140,
-        tabWidth: 2,
-        semi: false,
-        singleQuote: false,
-        jsxSingleQuote: true,
-      },
-    ],
+    "prettier/prettier": ["warn"],
     "vue/multi-word-component-names": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-unused-expressions": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/prefer-namespace-keyword": "off",
+    "@typescript-eslint/no-empty-object-type": "with-single-extends",
   },
   ignores: ["node_modules", "dist"],
 })
