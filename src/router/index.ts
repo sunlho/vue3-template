@@ -4,11 +4,15 @@ import type { RouterOptions } from "vue-router"
 const publicRoutes = [
   {
     path: "/",
-    component: () => import("@/views/index.vue"),
+    redirect: "/animate",
   },
   {
     path: "/animate",
     component: () => import("@/views/animate/index.vue"),
+  },
+  {
+    path: "/description",
+    component: () => import("@/views/description/index.vue"),
   },
 ]
 

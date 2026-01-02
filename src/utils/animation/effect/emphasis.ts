@@ -16,6 +16,7 @@ export const rubberBand = (config: AnimationParams): AnimationParams => {
   return mergeAnimationConfig(
     {
       keyframes: [
+        { scaleX: 1, scaleY: 1, duration: 0, easing: "outSine" },
         { scaleX: 1.25, scaleY: 0.75, duration, easing: "outSine" },
         { scaleX: 0.75, scaleY: 1.25, duration, easing: "outSine" },
         { scaleX: 1.15, scaleY: 0.85, duration, easing: "outSine" },
@@ -63,6 +64,7 @@ export const headShake = (config: AnimationParams): AnimationParams => {
   return mergeAnimationConfig(
     {
       keyframes: [
+        { translateX: 0, easing: "outSine" },
         { translateX: -5, easing: "outSine" },
         { translateX: 5, easing: "outSine" },
         { translateX: -5, easing: "outSine" },
@@ -79,6 +81,7 @@ export const swing = (config: AnimationParams): AnimationParams => {
   return mergeAnimationConfig(
     {
       keyframes: [
+        { rotate: 0, easing: "inOutSine" },
         { rotate: 15, easing: "inOutSine" },
         { rotate: -10, easing: "inOutSine" },
         { rotate: 5, easing: "inOutSine" },
@@ -101,6 +104,7 @@ export const tada = (config: AnimationParams): AnimationParams => {
   return mergeAnimationConfig(
     {
       keyframes: [
+        { scale: 1, rotate: 0, duration: 0 },
         { scale: 1.2, rotate: 0, duration: duration * 0.4, easing: "outExpo" },
         { rotate: 10, duration: duration * 0.05, easing: "inOutSine" },
         { rotate: -10, duration: duration * 0.05, easing: "inOutSine" },

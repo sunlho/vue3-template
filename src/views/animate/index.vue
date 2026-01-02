@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { handleAnimation, hiddenEffect } from "@/utils/animation"
 import animateCssData from "./data"
+import { nextTick } from "vue"
 
 const handlePreviewAnimate = (e: MouseEvent, item: { label: string; value: string }) => {
   const target = (e.target as HTMLElement).getElementsByClassName("target")[0]
@@ -9,14 +10,13 @@ const handlePreviewAnimate = (e: MouseEvent, item: { label: string; value: strin
     {
       ...item,
       onComplete: (anim) => {
-        console.log("Animation complete:", item.label, anim)
-        setTimeout(() => {
+        nextTick(() => {
           anim.reset()
           if (hiddenEffect[item.value]) {
             anim.targets[0].style.transform = ""
             anim.targets[0].style.opacity = "1"
           }
-        }, 500)
+        })
       },
     },
   ])
@@ -35,7 +35,7 @@ const handlePreviewAnimate = (e: MouseEvent, item: { label: string; value: strin
           @mouseenter="handlePreviewAnimate($event, animate)"
         >
           <div class="w-100px h-100px flex flex-col items-center justify-center gap-10px cursor-pointer rd-6px b-#eee b-solid b-1px br-4px">
-            <span class="target h-30px w-30px bg-#ccc pointer-events-none"></span>
+            <span class="target h-30px w-30px bg-#666 pointer-events-none"></span>
             <span class="c-#000">{{ animate.label }}</span>
           </div>
         </div>
