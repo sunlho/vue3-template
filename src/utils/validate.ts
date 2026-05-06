@@ -27,11 +27,9 @@ export function identityIDCard(code: string) {
     const factor = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2]
     const parity = [1, 0, "X", 9, 8, 7, 6, 5, 4, 3, 2]
     let sum = 0
-    let ai = 0
-    let wi = 0
     for (let i = 0; i < 17; i++) {
-      ai = parseInt(code[i])
-      wi = factor[i]
+      const ai = parseInt(code[i])
+      const wi = factor[i]
       sum += ai * wi // 开始计算并相加
     }
     const last = parity[sum % 11] // 求余

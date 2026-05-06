@@ -24,7 +24,6 @@ export default tseslint.config({
     "@typescript-eslint/no-unused-expressions": "off",
     "@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/prefer-namespace-keyword": "off",
-    "@typescript-eslint/no-empty-object-type": "with-single-extends",
   },
   ignores: ["node_modules", "dist"],
 })

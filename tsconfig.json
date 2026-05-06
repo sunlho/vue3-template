@@ -19,13 +19,12 @@
       "DOM.iterable",
       "scripthost"
     ],
-    "baseUrl": ".",
     "paths": {
       "@/*": [
-        "src/*"
+        "./src/*"
       ],
       "/#/*": [
-        "types/*"
+        "./types/*"
       ]
     }
   },
